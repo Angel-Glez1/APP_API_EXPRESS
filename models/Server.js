@@ -1,5 +1,6 @@
 const cors = require('cors');
 const express = require('express');
+const { dbConnection } = require('../database/config');
 
 
 /*...  Usar express Con clases  ...*/
@@ -16,10 +17,21 @@ class Server {
 
         // Enpoints de mi api
         this.userPath = '/api/usuarios';
+
+        // Conectar ala db
+        this.connectDB();
         // Middlewares
         this.middlewares();
         // Router
         this.routes();
+
+        
+    }
+
+
+
+    async connectDB() {
+        await dbConnection();
     }
 
     // Middlewares
@@ -39,7 +51,7 @@ class Server {
     // Router de la API REST
     routes() {
 
-        this.app.use(this.userPath, require('../routers/user'));
+        this.app.use(this.userPath, require('../routers/userRouter'));
 
     }
 
