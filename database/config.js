@@ -1,16 +1,18 @@
+/*==============================================
+|       NOTA
+|===============================================
+|
+|   La app sola va a funcionar si se puede 
+|   conectar a la DDBB. Ya que si no se 
+|   conecta generamos un Thorow Error para
+|   que pare la ejecucion de la aplicacion.
+|
+*/ 
 const mongoose = require('mongoose');
 
-/*
 
-    Hacer la conecxion ala base de datos...
-
-*/ 
-
-
+// TODO::Conexion ala DDBB
 const dbConnection = async () => {
-
-
-    const url = 'mongodb://localhost:27017/node_cafe';
 
     try {
 
@@ -18,16 +20,13 @@ const dbConnection = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
-            useFindAndModify : false
+            useFindAndModify: false
         });
-
         console.log('Connection success DDBB online');
 
-        
     } catch (error) {
-        console.log(error)
-        throw new Error('Error al iniciar el proceso la base de datos');
-
+        console.log(error);
+        throw new Error('Error al conectarse ala DDBB ');
     }
 
 }

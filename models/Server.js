@@ -1,5 +1,6 @@
 const cors = require('cors');
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const { dbConnection } = require('../database/config');
 
 
@@ -15,27 +16,36 @@ class Server {
         this.port = process.env.PORT;
         this.listen();
 
-        // Enpoints de mi api
-        this.userPath = '/api/usuarios';
+        // Paths the my Web Reset
+        this.paths = {
+            auth:     '/api/auth',
+            search :  '/api/buscar',
+            category: '/api/categorias',
+            products: '/api/productos',
+            user:     '/api/usuarios',
+            upload:   '/api/upload'
+        } 
 
-        // Conectar ala db
+        // Conectar a la DDBB.
         this.connectDB();
-        // Middlewares
+
+        // Middlewares.
         this.middlewares();
-        // Router
+
+        // Rutas de mi aplicacion.
         this.routes();
 
-        
     }
 
 
-
+    // Connection of the DDBB 
     async connectDB() {
         await dbConnection();
     }
 
     // Middlewares
     middlewares() {
+
         // CORS
         this.app.use(cors());
 
@@ -46,25 +56,33 @@ class Server {
         this.app.use(express.json());
 
 
+        // FileSytem carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
+
     }
 
-    // Router de la API REST
+    // Routers the Rest Server
     routes() {
-
-        this.app.use(this.userPath, require('../routers/userRouter'));
-
+        this.app.use(this.paths.auth, require('../routers/authRouter'));
+        this.app.use(this.paths.category, require('../routers/categoriaRouter'));
+        this.app.use(this.paths.search, require('../routers/buscadorRouter'));
+        this.app.use(this.paths.products, require('../routers/productosRouter'));
+        this.app.use(this.paths.user, require('../routers/userRouter'));
+        this.app.use(this.paths.upload, require('../routers/uploadRouter'));
     }
 
 
-    // Puerto
+
+    // Port donde correo mi aplicacion
     listen() {
         this.app.listen(this.port, () => {
             console.log(`Servidor Corriendo en ${this.port}`);
         });
     }
-
-
-
 
 }
 

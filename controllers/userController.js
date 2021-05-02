@@ -74,7 +74,7 @@ const UsuariosPut = async (req, res = response) => {
     // Actulizar el usuario y retornar los nuevos cambios
     const usuario = await Usuario.findByIdAndUpdate(id, datosParaActualizar, { new: true });
     res.status(200).json(usuario);
-    
+
 }
 
 /**
@@ -82,22 +82,23 @@ const UsuariosPut = async (req, res = response) => {
  */
 
 const UsuariosDelete = async (req, res = response, next) => {
+
     const { id } = req.params;
-    
-    // Borrado Fisico
-    // const usuario = await Usuario.findByIdAndDelete(id);
 
     // Borrado Logico
-    const usuario = await Usuario.findByIdAndUpdate(id, { estado: false }, { new: true });
+    const usuarioDelete = await Usuario.findByIdAndUpdate(id, { estado: false }, { new: true });
+    const usuarioAuth = req.usuario;
+    
 
-    res.json(usuario);
-
+    res.json({ usuarioDelete, usuarioAuth });
     next();
 }
 
 
 
-/*... Exportacion de las funciones para el Router de usuarios ....*/ 
+
+
+/*... Exportacion de las funciones para el Router de usuarios ....*/
 module.exports = {
     UsuariosGet,
     UsuariosPost,

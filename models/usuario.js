@@ -20,13 +20,13 @@ const UsuarioSchema = Schema({
         required: [true, 'la contraseña es obligatorio']
     },
 
-    imagen: {
-        type: String,
+    img: {
+        type: String
     },
-
     rol: {
         type: String,
         required: true,
+        default: 'USER_ROL',
     },
 
     estado: {
@@ -43,8 +43,10 @@ const UsuarioSchema = Schema({
 
 // Cofig para retornar sola los datos que mi interesan
 UsuarioSchema.methods.toJSON = function () {
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+    usuario.uid = _id;
     return usuario;
 }
 
 module.exports = model('Usuario', UsuarioSchema);
+
